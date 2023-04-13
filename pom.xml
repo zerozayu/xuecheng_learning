@@ -21,6 +21,7 @@
         <spring-boot.version>2.6.13</spring-boot.version>
         <spring-cloud.version>2021.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
+        <!-- <org.projectlombok.version></org.projectlombok.version> -->
     </properties>
 
     <dependencies>
@@ -62,9 +63,20 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                    <encoding>UTF-8</encoding>
+                    <!-- 指定项目源码 jdk 的版本 -->
+                    <source>${java.version}</source>
+                    <!-- 指定项目编译后的 jdk 版本 -->
+                    <target>${java.version}</target>
+                    <!-- 指定maven编译时读取文件使用的编码 -->
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <!-- 配置注解预编译 -->
+                    <!-- <annotationProcessorPaths> -->
+                    <!--     <path> -->
+                    <!--         <groupId>org.projectlombok</groupId> -->
+                    <!--         <artifactId>lombok</artifactId> -->
+                    <!--         <version>${org.projectlombok.version}</version> -->
+                    <!--     </path> -->
+                    <!-- </annotationProcessorPaths> -->
                 </configuration>
             </plugin>
             <plugin>
