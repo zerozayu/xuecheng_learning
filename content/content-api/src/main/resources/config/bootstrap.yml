@@ -1,0 +1,16 @@
+server:
+  servlet:
+    context-path: /content
+  port: 34567
+#微服务配置
+spring:
+  application:
+    name: content-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xc_content?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false
+    username: root
+    password: 123456
+# 日志文件配置路径
+logging:
+  config: classpath:config/log4j2-dev.xml

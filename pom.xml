@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.zhangyu</groupId>
-    <artifactId>xuecheng</artifactId>
+    <groupId>com.xuecheng</groupId>
+    <artifactId>parent</artifactId>
     <version>0.0.1</version>
-    <name>xuecheng</name>
-    <description>xuecheng</description>
+    <name>parent</name>
 
     <modules>
         <module>base</module>
+        <module>content</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -17,11 +17,16 @@
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
         <spring-cloud.version>2021.0.4</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
-        <!-- <org.projectlombok.version></org.projectlombok.version> -->
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+
+        <xuecheng.version>0.0.1</xuecheng.version>
     </properties>
 
     <dependencies>
@@ -53,6 +58,49 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- mapstruct 代码生成器，简化java bean之间的映射 -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <!-- mybatis plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <!-- Spring Boot 集成 swagger3 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-boot-starter.version}</version>
+            </dependency>
+
+
+            <!-- 学成,版本管理 -->
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>base</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>content-model</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>content-service</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>content-api</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -61,7 +109,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <!-- 指定项目源码 jdk 的版本 -->
                     <source>${java.version}</source>
