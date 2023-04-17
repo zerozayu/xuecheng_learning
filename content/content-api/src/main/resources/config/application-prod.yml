@@ -2,15 +2,9 @@ spring:
   devtools:
     restart:
       # 热启动自动重启
-      enabled: true
+      enabled: false
 springfox:
   documentation:
     swagger-ui:
       # 配置 swagger 启动
-      enabled: true
-    swagger:
-      v3:
-        packagesToScan:
-          - com.xuecheng.content
-
-
+      enabled: false
