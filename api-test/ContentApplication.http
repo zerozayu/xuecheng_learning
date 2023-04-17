@@ -1,0 +1,11 @@
+### 查询所有课程
+
+POST http://127.0.0.1:20000/content/course/list?pageNo=1&pageSize=2
+Content-Type: application/json
+
+{
+  "auditStatus": "202002",
+  "courseName": ""
+}
+
+
