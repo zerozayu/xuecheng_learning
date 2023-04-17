@@ -1,4 +1,4 @@
-package com.xuecheng.content.config.mp;
+package com.xuecheng.system.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2023/4/17 11:09
  */
 @Configuration
-@MapperScan("com.xuecheng.content.mapper")
+@MapperScan("com.xuecheng.system.mapper")
 public class MybatisPlusConfig {
 
     /**

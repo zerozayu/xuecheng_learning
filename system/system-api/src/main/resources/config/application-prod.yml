@@ -1,0 +1,10 @@
+spring:
+  devtools:
+    restart:
+      # 热启动自动重启
+      enabled: false
+springfox:
+  documentation:
+    swagger-ui:
+      # 配置 swagger 启动
+      enabled: false

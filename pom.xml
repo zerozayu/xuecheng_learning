@@ -10,6 +10,7 @@
     <modules>
         <module>base</module>
         <module>content</module>
+        <module>system</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -93,7 +94,7 @@
                 <artifactId>base</artifactId>
                 <version>${xuecheng.version}</version>
             </dependency>
-
+            <!-- content -->
             <dependency>
                 <groupId>com.xuecheng</groupId>
                 <artifactId>content-model</artifactId>
@@ -107,6 +108,22 @@
             <dependency>
                 <groupId>com.xuecheng</groupId>
                 <artifactId>content-api</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <!-- system -->
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>system-model</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>system-service</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>system-api</artifactId>
                 <version>${xuecheng.version}</version>
             </dependency>
         </dependencies>

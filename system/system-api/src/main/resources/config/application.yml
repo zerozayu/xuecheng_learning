@@ -1,0 +1,12 @@
+server:
+  servlet:
+    context-path: /system
+  port: 63110
+
+spring:
+  profiles:
+    active: dev
+  mvc:
+    pathmatch:
+      # Springfox 使用的路径匹配是基于AntPathMatcher的，而Spring Boot 2.6.X使用的是PathPatternMatcher。
+      matching-strategy: ant_path_matcher

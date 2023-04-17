@@ -1,4 +1,4 @@
-package com.xuecheng.content.config.swagger;
+package com.xuecheng.content.config;
 
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
