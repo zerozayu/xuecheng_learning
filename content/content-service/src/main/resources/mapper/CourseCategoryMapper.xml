@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuecheng.content.mapper.CourseCategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.xuecheng.content.model.po.CourseCategory">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="label" column="label" jdbcType="VARCHAR"/>
+        <result property="parentid" column="parentid" jdbcType="VARCHAR"/>
+        <result property="isShow" column="is_show" jdbcType="TINYINT"/>
+        <result property="orderby" column="orderby" jdbcType="INTEGER"/>
+        <result property="isLeaf" column="is_leaf" jdbcType="TINYINT"/>
+    </resultMap>
+    <resultMap id="BaseResultTree" extends="BaseResultMap" type="com.xuecheng.content.model.dto.CourseCategoryTreeDto">
+        <collection property="childrenTreeNodes" select="selectTreeNodes" column="id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        select id,
+               name,
+               label,
+               parentid,
+               is_show,
+               orderby,
+               is_leaf
+        from course_category
+    </sql>
+    <select id="selectTreeNodes" resultMap="BaseResultTree">
+        <include refid="Base_Column_List"/>
+        <where>
+            and parentid = #{id}
+        </where>
+    </select>
+
+    <!-- <select id="selectChildrenNode" resultMap="BaseResultTree"> -->
+    <!--     <include refid="Base_Column_List"/> -->
+    <!--     <where> -->
+    <!--         and parentid = #{parentid} -->
+    <!--     </where> -->
+    <!-- </select> -->
+</mapper>

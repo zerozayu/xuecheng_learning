@@ -24,6 +24,7 @@ public class GlobalCorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         //允许白名单域名进行跨域调用
         // config.addAllowedOrigin("*");
+        // 当设置setAllowCredentials(true)时,不能使用(*)
         config.setAllowedOriginPatterns(Arrays.asList("http://*.example.com", "http://localhost:8601"));
         //允许跨越发送cookie
         config.setAllowCredentials(true);
