@@ -5,7 +5,7 @@ spring:
       enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/xc_content?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost:3306/xc_content?useSSL=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false
     username: root
     password: 123456
 springfox:
