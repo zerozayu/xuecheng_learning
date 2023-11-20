@@ -1,11 +1,18 @@
 package com.xuecheng.base.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 全局异常处理器
@@ -16,6 +23,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ResponseBody
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RestErrorResponse methodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        BindingResult bindingResult = e.getBindingResult();
+        List<String> msgList = bindingResult.getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+        String msg = StringUtils.join(msgList, ",");
+
+        log.error("【系统异常】{}", msg);
+        return new RestErrorResponse(msg);
+    }
 
     @ResponseBody
     @ExceptionHandler(XueChengPlusException.class)

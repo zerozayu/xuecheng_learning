@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zhangyu
  * @date 2023/4/17 16:00
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.xuecheng.base", "com.xuecheng.system"})
 public class SystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(SystemApplication.class, args);

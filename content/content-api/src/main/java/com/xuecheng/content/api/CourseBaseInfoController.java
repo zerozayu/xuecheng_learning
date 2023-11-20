@@ -9,6 +9,7 @@ import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.service.CourseBaseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,9 +38,9 @@ public class CourseBaseInfoController {
 
     @ApiOperation(value = "新增课程基础信息")
     @PostMapping("/course")
-    public CourseBaseInfoDto createCourseBase(@RequestBody AddCourseDto addCourseDto) {
+    public CourseBaseInfoDto createCourseBase(@Validated @RequestBody AddCourseDto addCourseDto) {
         Long companyId = 1232141425L;
-        return courseBaseService.createCourseBase(companyId,addCourseDto);
+        return courseBaseService.createCourseBase(companyId, addCourseDto);
     }
 
 }
