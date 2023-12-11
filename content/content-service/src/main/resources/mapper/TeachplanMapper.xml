@@ -106,7 +106,7 @@
                m1.id             teachplanMeidaId,
                m1.media_id       mediaId
         from teachplan one
-                 inner join teachplan two
+                 left join teachplan two
                             on one.id = two.parentid
                  left join teachplan_media m1
                            on m1.teachplan_id = one.id
