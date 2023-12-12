@@ -24,6 +24,12 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * 注解@Validated校验引发的异常MethodArgumentNotValidException
+     *
+     * @param e
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -40,6 +46,12 @@ public class GlobalExceptionHandler {
         return new RestErrorResponse(msg);
     }
 
+    /**
+     * 自定义异常XueChengPlusException
+     *
+     * @param e
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler(XueChengPlusException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
