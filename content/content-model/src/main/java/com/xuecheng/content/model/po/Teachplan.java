@@ -24,8 +24,7 @@ public class Teachplan implements Serializable {
     /**
      * 主键
      */
-    @NotNull(message = "[]不能为空")
-    @ApiModelProperty("")
+    @ApiModelProperty("主键")
     private Long id;
     /**
      * 课程计划名称

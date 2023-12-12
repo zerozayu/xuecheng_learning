@@ -13,8 +13,4 @@ import java.util.List;
 * @createDate 2023-12-06 23:31:46
 */
 public interface TeachplanMediaService extends IService<TeachplanMedia> {
-
-    List<TeachplanDto> findTeachplanTree(Long courseId);
-
-    void saveTeachpan(SaveTeachplanDto teachplanDto);
 }

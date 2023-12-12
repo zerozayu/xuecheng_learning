@@ -24,51 +24,6 @@ import java.util.List;
 public class TeachplanMediaServiceImpl extends ServiceImpl<TeachplanMediaMapper, TeachplanMedia>
         implements TeachplanMediaService {
 
-    private final TeachplanMapper teachplanMapper;
-
-    public TeachplanMediaServiceImpl(TeachplanMapper teachplanMapper) {
-        this.teachplanMapper = teachplanMapper;
-    }
-
-    @Override
-    public List<TeachplanDto> findTeachplanTree(Long courseId) {
-        return teachplanMapper.selectTreeNodes(courseId);
-    }
-
-    @Override
-    @Transactional
-    public void saveTeachpan(SaveTeachplanDto teachplanDto) {
-        // 课程id
-        Long id = teachplanDto.getId();
-        if (id != null) {
-            Teachplan teachplan = new Teachplan();
-            BeanUtils.copyProperties(teachplanDto, teachplan);
-            teachplanMapper.updateById(teachplan);
-        } else {
-            // 取出同父同级别的课程计划数量
-            int count = this.getTeachplanCount(teachplanDto.getCourseId(), teachplanDto.getParentid());
-            Teachplan teachplanNew = new Teachplan();
-            teachplanNew.setOrderby(count + 1);
-            BeanUtils.copyProperties(teachplanDto, teachplanNew);
-            teachplanMapper.insert(teachplanNew);
-        }
-    }
-
-    /**
-     * 获取最新的排序号
-     *
-     * @param courseId
-     * @param parentid
-     * @return
-     */
-    private int getTeachplanCount(Long courseId, Long parentid) {
-        LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Teachplan::getCourseId, courseId);
-        queryWrapper.eq(Teachplan::getParentid, parentid);
-        return Math.toIntExact(teachplanMapper.selectCount(queryWrapper));
-    }
-
-
 }
 
 
