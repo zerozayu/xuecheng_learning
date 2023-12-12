@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -25,7 +26,7 @@ public class Teachplan implements Serializable {
      * 主键
      */
     @ApiModelProperty("主键")
-    private Long id;
+    protected Long id;
     /**
      * 课程计划名称
      */
@@ -57,12 +58,12 @@ public class Teachplan implements Serializable {
      * 开始直播时间
      */
     @ApiModelProperty("开始直播时间")
-    private Date startTime;
+    private LocalDate startTime;
     /**
      * 直播结束时间
      */
     @ApiModelProperty("直播结束时间")
-    private Date endTime;
+    private LocalDate endTime;
     /**
      * 章节及课程时介绍
      */
@@ -108,10 +109,10 @@ public class Teachplan implements Serializable {
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    private Date createDate;
+    private LocalDate createDate;
     /**
      * 修改时间
      */
     @ApiModelProperty("修改时间")
-    private Date changeDate;
+    private LocalDate changeDate;
 }
