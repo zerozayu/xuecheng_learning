@@ -29,7 +29,7 @@ public class TeachplanServiceImpl extends ServiceImpl<TeachplanMapper, Teachplan
     }
 
     @Override
-    public List<TeachplanDto> findTeachplanTree(Long courseId) {
+    public List<TeachplanDto> findTeachplanTree(String courseId) {
         return teachplanMapper.selectTreeNodes(courseId);
     }
 
@@ -37,7 +37,7 @@ public class TeachplanServiceImpl extends ServiceImpl<TeachplanMapper, Teachplan
     @Transactional
     public void saveTeachpan(SaveTeachplanDto teachplanDto) {
         // 课程id
-        Long id = teachplanDto.getId();
+        String id = teachplanDto.getId();
         if (id != null) {
             Teachplan teachplan = new Teachplan();
             BeanUtils.copyProperties(teachplanDto, teachplan);
@@ -59,7 +59,7 @@ public class TeachplanServiceImpl extends ServiceImpl<TeachplanMapper, Teachplan
      * @param parentid
      * @return
      */
-    private int getTeachplanCount(Long courseId, Long parentid) {
+    private int getTeachplanCount(String courseId, String parentid) {
         LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Teachplan::getCourseId, courseId);
         queryWrapper.eq(Teachplan::getParentid, parentid);

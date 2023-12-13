@@ -1,16 +1,12 @@
 package com.xuecheng.base.aspect;
 
-import com.alibaba.fastjson2.util.UUIDUtils;
 import com.xuecheng.base.annotation.AutoFill;
 import com.xuecheng.base.constant.AutoFillMethods;
 import com.xuecheng.base.enumeration.OperationType;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.utils.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
-import nonapi.io.github.classgraph.utils.ReflectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -30,6 +26,7 @@ import java.lang.reflect.Method;
 @Component
 @Aspect
 public class AutoFillAspect {
+
     /**
      * 定义切入点
      * 1. '*' 表示任何返回类型
@@ -66,7 +63,7 @@ public class AutoFillAspect {
         Object entity = args[0];
 
         // 3. 准备赋值的数据
-        Long id = System.currentTimeMillis();
+        String id = String.valueOf(System.currentTimeMillis());
 
         // 4. 根据当前不同的操作类型,为对应的属性通过反射来赋值
         if (operationType == OperationType.INSERT) {

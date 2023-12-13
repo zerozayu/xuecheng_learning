@@ -22,7 +22,7 @@ public class TeachplanMedia implements Serializable {
     */
     @NotNull(message="[主键]不能为空")
     @ApiModelProperty("主键")
-    private Long id;
+    private String id;
     /**
     * 媒资文件id
     */
@@ -35,13 +35,13 @@ public class TeachplanMedia implements Serializable {
     */
     @NotNull(message="[课程计划标识]不能为空")
     @ApiModelProperty("课程计划标识")
-    private Long teachplanId;
+    private String teachplanId;
     /**
     * 课程标识
     */
     @NotNull(message="[课程标识]不能为空")
     @ApiModelProperty("课程标识")
-    private Long courseId;
+    private String courseId;
     /**
     * 媒资文件原始名称
     */

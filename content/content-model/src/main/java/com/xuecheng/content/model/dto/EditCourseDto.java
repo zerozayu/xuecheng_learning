@@ -17,6 +17,6 @@ import lombok.EqualsAndHashCode;
 public class EditCourseDto extends AddCourseDto {
 
     @ApiModelProperty(value = "课程id", required = true)
-    private Long id;
+    private String id;
 
 }

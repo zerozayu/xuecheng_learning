@@ -13,7 +13,7 @@ public class SaveTeachplanDto {
     /***
      * 教学计划id
      */
-    private Long id;
+    private String id;
 
     /**
      * 课程计划名称
@@ -23,7 +23,7 @@ public class SaveTeachplanDto {
     /**
      * 课程计划父级Id
      */
-    private Long parentid;
+    private String parentid;
 
     /**
      * 层级，分为1、2、3级
@@ -38,12 +38,12 @@ public class SaveTeachplanDto {
     /**
      * 课程标识
      */
-    private Long courseId;
+    private String courseId;
 
     /**
      * 课程发布标识
      */
-    private Long coursePubId;
+    private String coursePubId;
 
     /**
      * 是否支持试学或预览（试看）

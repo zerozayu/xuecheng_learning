@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @date 2023/11/19 22:37
  */
 public class RestErrorResponse implements Serializable {
-    private final static Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private String errMessage;
 

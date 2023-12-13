@@ -74,7 +74,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
     }
 
     @Override
-    public CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto dto) {
+    public CourseBaseInfoDto createCourseBase(String companyId, AddCourseDto dto) {
         // //合法性校验
         // if (StringUtils.isBlank(dto.getName())) {
         //     throw new XueChengPlusException("课程名称为空");
@@ -126,7 +126,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         //向课程营销表保存课程营销信息
         //课程营销信息
         CourseMarket courseMarketNew = new CourseMarket();
-        Long courseId = courseBaseNew.getId();
+        String courseId = courseBaseNew.getId();
         BeanUtils.copyProperties(dto, courseMarketNew);
         courseMarketNew.setId(courseId);
         int i = saveCourseMarket(courseMarketNew);
@@ -141,7 +141,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
 
     //根据课程id查询课程基本信息，包括基本信息和营销信息
     @Override
-    public CourseBaseInfoDto getCourseBaseInfo(Long courseId) {
+    public CourseBaseInfoDto getCourseBaseInfo(String courseId) {
 
         CourseBase courseBase = courseBaseMapper.selectById(courseId);
         if (courseBase == null) {
@@ -166,10 +166,10 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
 
     @Transactional
     @Override
-    public CourseBaseInfoDto updateCourseBase(Long companyId, EditCourseDto dto) {
+    public CourseBaseInfoDto updateCourseBase(String companyId, EditCourseDto dto) {
 
         // 课程id
-        Long courseId = dto.getId();
+        String courseId = dto.getId();
         CourseBase courseBase = courseBaseMapper.selectById(courseId);
         if (courseBase == null) {
             XueChengPlusException.cast("课程不存在");

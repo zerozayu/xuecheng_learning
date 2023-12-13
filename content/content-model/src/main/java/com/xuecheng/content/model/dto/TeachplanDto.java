@@ -17,20 +17,10 @@ import java.util.List;
  * @author zhangyu
  * @date 2023/12/6 22:31
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class TeachplanDto implements Serializable {
+public class TeachplanDto extends Teachplan {
     private static final long serialVersionUID = 1L;
-
-    private String id;
-    private String pname;
-    private Long parentid;
-    private Integer grade;
-    private String mediaType;
-    private Long courseId;
-    private Long coursePubId;
-    private LocalDate startTime;
-    private LocalDate endTime;
-    private Integer orderby;
 
     /**
      * 课程计划关联的媒资信息

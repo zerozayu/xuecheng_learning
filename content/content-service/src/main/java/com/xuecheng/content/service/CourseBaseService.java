@@ -24,14 +24,14 @@ public interface CourseBaseService extends IService<CourseBase> {
      * @param addCourseDto 课程基本信息
      * @return com.xuecheng.content.model.dto.CourseBaseInfoDto
      */
-    CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto addCourseDto);
+    CourseBaseInfoDto createCourseBase(String companyId, AddCourseDto addCourseDto);
 
     /**
      * 查询课程基本信息
      * @param courseId
      * @return
      */
-    CourseBaseInfoDto getCourseBaseInfo(Long courseId);
+    CourseBaseInfoDto getCourseBaseInfo(String courseId);
 
     /**
      * 修改课程基本信息
@@ -39,5 +39,5 @@ public interface CourseBaseService extends IService<CourseBase> {
      * @param dto
      * @return
      */
-    CourseBaseInfoDto updateCourseBase(Long companyId, EditCourseDto dto);
+    CourseBaseInfoDto updateCourseBase(String companyId, EditCourseDto dto);
 }

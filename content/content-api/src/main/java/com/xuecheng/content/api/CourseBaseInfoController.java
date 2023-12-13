@@ -39,13 +39,13 @@ public class CourseBaseInfoController {
     @ApiOperation(value = "新增课程基础信息")
     @PostMapping("/course")
     public CourseBaseInfoDto createCourseBase(@Validated(ValidationGroups.Insert.class) @RequestBody AddCourseDto addCourseDto) {
-        Long companyId = 1232141425L;
+        String companyId = "1232141425";
         return courseBaseService.createCourseBase(companyId, addCourseDto);
     }
 
     @ApiOperation(value = "查询课程基础信息")
     @GetMapping("/course/{courseId}")
-    public CourseBaseInfoDto getCourseBaseById(@PathVariable(value = "courseId") Long courseId) {
+    public CourseBaseInfoDto getCourseBaseById(@PathVariable(value = "courseId") String courseId) {
         return courseBaseService.getCourseBaseInfo(courseId);
     }
 
@@ -53,7 +53,7 @@ public class CourseBaseInfoController {
     @PutMapping("/course")
     public CourseBaseInfoDto modifyCourseBase(@RequestBody @Validated EditCourseDto dto) {
         //机构id，由于认证系统没有上线暂时硬编码
-        Long companyId = 1232141425L;
+        String companyId = "1232141425";
 
         return courseBaseService.updateCourseBase(companyId, dto);
     }

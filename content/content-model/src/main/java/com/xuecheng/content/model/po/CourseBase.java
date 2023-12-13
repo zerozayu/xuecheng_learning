@@ -25,13 +25,13 @@ public class CourseBase implements Serializable {
      */
     @NotNull(message = "[主键]不能为空")
     @ApiModelProperty("主键")
-    private Long id;
+    private String id;
     /**
      * 机构ID
      */
     @NotNull(message = "[机构ID]不能为空")
     @ApiModelProperty("机构ID")
-    private Long companyId;
+    private String companyId;
     /**
      * 机构名称
      */

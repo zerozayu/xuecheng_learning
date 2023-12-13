@@ -8,13 +8,13 @@ import com.xuecheng.content.model.po.Teachplan;
 import java.util.List;
 
 /**
-* @author zhangyu
-* @description 针对表【teachplan(课程计划)】的数据库操作Service
-* @createDate 2023-12-06 23:31:40
-*/
+ * @author zhangyu
+ * @description 针对表【teachplan(课程计划)】的数据库操作Service
+ * @createDate 2023-12-06 23:31:40
+ */
 public interface TeachplanService extends IService<Teachplan> {
 
-    List<TeachplanDto> findTeachplanTree(Long courseId);
+    List<TeachplanDto> findTeachplanTree(String courseId);
 
     void saveTeachpan(SaveTeachplanDto teachplanDto);
 }

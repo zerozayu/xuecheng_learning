@@ -26,7 +26,7 @@ public class Teachplan implements Serializable {
      * 主键
      */
     @ApiModelProperty("主键")
-    protected Long id;
+    protected String id;
     /**
      * 课程计划名称
      */
@@ -40,7 +40,7 @@ public class Teachplan implements Serializable {
      */
     @NotNull(message = "[课程计划父级Id]不能为空")
     @ApiModelProperty("课程计划父级Id")
-    private Long parentid;
+    private String parentid;
     /**
      * 层级，分为1、2、3级
      */
@@ -88,12 +88,12 @@ public class Teachplan implements Serializable {
      */
     @NotNull(message = "[课程标识]不能为空")
     @ApiModelProperty("课程标识")
-    private Long courseId;
+    private String courseId;
     /**
      * 课程发布标识
      */
     @ApiModelProperty("课程发布标识")
-    private Long coursePubId;
+    private String coursePubId;
     /**
      * 状态（1正常  0删除）
      */

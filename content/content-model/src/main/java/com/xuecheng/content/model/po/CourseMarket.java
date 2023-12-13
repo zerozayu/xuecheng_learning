@@ -22,7 +22,7 @@ public class CourseMarket implements Serializable {
      */
     @NotNull(message = "[主键，课程id]不能为空")
     @ApiModelProperty("主键，课程id")
-    private Long id;
+    private String id;
     /**
      * 收费规则，对应数据字典
      */

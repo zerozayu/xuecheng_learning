@@ -21,7 +21,7 @@ public class Dictionary implements Serializable {
      */
     @NotNull(message = "[id标识]不能为空")
     @ApiModelProperty("id标识")
-    private Long id;
+    private String id;
     /**
      * 数据字典名称
      */
