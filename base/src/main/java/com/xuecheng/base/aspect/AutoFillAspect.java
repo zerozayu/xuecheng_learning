@@ -71,7 +71,7 @@ public class AutoFillAspect {
             try {
                 setId.invoke(entity, id);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new XueChengPlusException("公共字段的填充时异常: " + e.getMessage());
+                XueChengPlusException.cast("公共字段的填充时异常: " + e.getMessage());
             }
         } else if (operationType == OperationType.UPDATE) {
             // todo (zhangyu, 2023-12-12, 23:08:14) : 更新的时候的操作

@@ -22,7 +22,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -120,7 +119,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         int insert = courseBaseMapper.insert(courseBaseNew);
 
         if (insert <= 0) {
-            throw new XueChengPlusException("新增课程基本信息失败");
+            XueChengPlusException.cast("新增课程基本信息失败");
         }
 
         //向课程营销表保存课程营销信息
@@ -131,7 +130,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         courseMarketNew.setId(courseId);
         int i = saveCourseMarket(courseMarketNew);
         if (i <= 0) {
-            throw new XueChengPlusException("保存课程营销信息失败");
+            XueChengPlusException.cast("保存课程营销信息失败");
         }
 
         //查询课程基本信息及营销信息并返回
@@ -199,12 +198,12 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         //收费规则
         String charge = courseMarketNew.getCharge();
         if (StringUtils.isBlank(charge)) {
-            throw new XueChengPlusException("收费规则没有选择");
+            XueChengPlusException.cast("收费规则没有选择");
         }
         //收费规则为收费
         if (charge.equals("201001")) {
             if (courseMarketNew.getPrice() == null || courseMarketNew.getPrice().floatValue() <= 0) {
-                throw new XueChengPlusException("课程为收费价格不能为空且必须大于0");
+                XueChengPlusException.cast("课程为收费价格不能为空且必须大于0");
             }
         }
         //根据id从课程营销表查询

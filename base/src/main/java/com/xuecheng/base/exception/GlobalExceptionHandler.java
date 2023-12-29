@@ -1,5 +1,7 @@
 package com.xuecheng.base.exception;
 
+import com.xuecheng.base.enumeration.CommonError;
+import com.xuecheng.base.model.RestErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -42,8 +44,8 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
         String msg = StringUtils.join(msgList, ",");
 
-        log.error("【系统异常】{}", msg);
-        return new RestErrorResponse(msg);
+        log.error("【系统异常】{} - {}", CommonError.PARAMS_ERROR.getErrCode(), msg);
+        return new RestErrorResponse(CommonError.PARAMS_ERROR.getErrCode(), msg);
     }
 
     /**
@@ -56,8 +58,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(XueChengPlusException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public RestErrorResponse customException(XueChengPlusException e) {
-        log.error("【系统异常】{}", e.getErrMessage(), e);
-        return new RestErrorResponse(e.getErrMessage());
+        log.error("【系统异常】{} - {}", e.getErrCode(), e.getErrMessage(), e);
+        return new RestErrorResponse(e.getErrCode(), e.getErrMessage());
     }
 
     @ResponseBody
@@ -65,6 +67,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public RestErrorResponse exception(Exception e) {
         log.error("【系统异常】{}", e.getMessage(), e);
-        return new RestErrorResponse(CommonError.UNKNOWN_ERROR.getErrMessage());
+        return new RestErrorResponse(CommonError.UNKNOWN_ERROR.getErrCode(), CommonError.UNKNOWN_ERROR.getErrMessage());
     }
 }
