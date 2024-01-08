@@ -182,6 +182,10 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         // 封装基本信息
         BeanUtils.copyProperties(dto, courseBase);
         courseBase.setChangeDate(LocalDateTime.now());
+        int update = courseBaseMapper.updateById(courseBase);
+        if (update <= 0) {
+            XueChengPlusException.cast("修改课程基本信息失败");
+        }
 
         // 封装营销信息的数据
         CourseMarket courseMarket = new CourseMarket();
