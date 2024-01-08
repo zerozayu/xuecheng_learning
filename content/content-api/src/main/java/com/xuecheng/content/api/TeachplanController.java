@@ -41,7 +41,19 @@ public class TeachplanController {
     @ApiOperation("课程计划删除")
     @ApiImplicitParam(value = "teachPlanId", name = "课程计划id", required = true, dataType = "String", paramType = "path")
     @DeleteMapping("/teachplan/{teachPlanId}")
-    public void removaTeachPlan(@PathVariable("teachPlanId") String teachPlanId) {
+    public void removeTeachPlan(@PathVariable("teachPlanId") String teachPlanId) {
         teachplanService.removeTeachPlan(teachPlanId);
+    }
+
+    @ApiOperation("向上移动课程计划")
+    @PostMapping("/teachplan/moveup/{teachPlanId}")
+    public void moveUpTeachPlan(@PathVariable String teachPlanId){
+        teachplanService.moveUpTeachPlan(teachPlanId);
+    }
+
+    @ApiOperation("向下移动课程计划")
+    @PostMapping("/teachplan/movedown/{teachPlanId}")
+    public void moveDownTeachPlan(@PathVariable String teachPlanId){
+        teachplanService.moveDownTeachPlan(teachPlanId);
     }
 }
