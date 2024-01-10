@@ -58,4 +58,10 @@ public class CourseBaseInfoController {
         return courseBaseService.updateCourseBase(companyId, dto);
     }
 
+    @DeleteMapping("/course/{courseId}")
+    public void removeCourse(@PathVariable String courseId) {
+
+        courseBaseService.removeCourse(courseId);
+    }
+
 }

@@ -6,16 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
-import com.xuecheng.content.mapper.CourseBaseMapper;
-import com.xuecheng.content.mapper.CourseCategoryMapper;
-import com.xuecheng.content.mapper.CourseMarketMapper;
+import com.xuecheng.content.mapper.*;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
-import com.xuecheng.content.model.po.CourseBase;
-import com.xuecheng.content.model.po.CourseCategory;
-import com.xuecheng.content.model.po.CourseMarket;
+import com.xuecheng.content.model.po.*;
 import com.xuecheng.content.service.CourseBaseService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -37,11 +33,15 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
     private final CourseBaseMapper courseBaseMapper;
     private final CourseMarketMapper courseMarketMapper;
     private final CourseCategoryMapper courseCategoryMapper;
+    private final TeachplanMapper teachplanMapper;
+    private final CourseTeacherMapper courseTeacherMapper;
 
-    public CourseBaseServiceImpl(CourseBaseMapper courseBaseMapper, CourseMarketMapper courseMarketMapper, CourseCategoryMapper courseCategoryMapper) {
+    public CourseBaseServiceImpl(CourseBaseMapper courseBaseMapper, CourseMarketMapper courseMarketMapper, CourseCategoryMapper courseCategoryMapper, TeachplanMapper teachplanMapper, CourseTeacherMapper courseTeacherMapper) {
         this.courseBaseMapper = courseBaseMapper;
         this.courseMarketMapper = courseMarketMapper;
         this.courseCategoryMapper = courseCategoryMapper;
+        this.teachplanMapper = teachplanMapper;
+        this.courseTeacherMapper = courseTeacherMapper;
     }
 
     @Override
@@ -194,6 +194,32 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
 
         // 查询课程信息
         return this.getCourseBaseInfo(courseId);
+    }
+
+    @Override
+    @Transactional
+    public void removeCourse(String courseId) {
+
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            XueChengPlusException.cast("课程不存在");
+        }
+        if (!Objects.equals(courseBase.getAuditStatus(), "202002")) {
+            XueChengPlusException.cast("课程的审核状态为未提交方可删除");
+        }
+
+        // 删除课程相关的基本信息
+        courseBaseMapper.deleteById(courseId);
+        // 删除营销信息
+        courseMarketMapper.deleteById(courseId);
+        // 课程计划
+        LambdaQueryWrapper<Teachplan> teachplanLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        teachplanLambdaQueryWrapper.eq(Teachplan::getCourseId, courseId);
+        teachplanMapper.delete(teachplanLambdaQueryWrapper);
+        // 删除课程教师信息
+        LambdaQueryWrapper<CourseTeacher> courseTeacherLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        courseTeacherLambdaQueryWrapper.eq(CourseTeacher::getCourseId, courseId);
+        courseTeacherMapper.delete(courseTeacherLambdaQueryWrapper);
     }
 
 
