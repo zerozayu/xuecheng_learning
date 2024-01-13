@@ -11,6 +11,7 @@
         <module>base</module>
         <module>content</module>
         <module>system</module>
+        <module>gateway</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -26,6 +27,7 @@
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+        <fastjson2.version>2.0.27</fastjson2.version>
 
         <xuecheng.version>0.0.1</xuecheng.version>
     </properties>
@@ -86,6 +88,11 @@
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>${springfox-boot-starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
+            </dependency>
 
 
             <!-- 学成,版本管理 -->
@@ -126,6 +133,11 @@
                 <artifactId>system-api</artifactId>
                 <version>${xuecheng.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>gateway</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -157,7 +169,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.zhangyu.xuecheng.XuechengApplication</mainClass>
+                    <mainClass>com.xuecheng.xuecheng.XuechengApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
