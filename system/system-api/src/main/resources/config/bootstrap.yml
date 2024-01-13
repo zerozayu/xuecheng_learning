@@ -1,8 +1,27 @@
 #微服务配置
 spring:
   application:
-    name: system-service
-
-# 日志文件配置路径
-logging:
-  config: classpath:config/log4j2-dev.xml
+    name: system-api
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      discovery:
+        namespace: dev
+        group: xuecheng-plus-project
+      config:
+        namespace: dev
+        group: xuecheng-plus-project
+        file-extension: yml
+        refresh-enabled: true
+        extension-configs:
+          - data-id: system-service-${spring.profiles.active}.yml
+            group: xuecheng-plus-project
+            refresh: true
+        shared-configs:
+          - data-id: logging-${spring.profiles.active}.yml
+            group: xuecheng-plus-common
+            refresh: true
