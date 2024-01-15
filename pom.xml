@@ -12,6 +12,7 @@
         <module>content</module>
         <module>system</module>
         <module>gateway</module>
+        <module>media</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -28,6 +29,7 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <fastjson2.version>2.0.27</fastjson2.version>
+        <minio.version>8.5.7</minio.version>
 
         <xuecheng.version>0.0.1</xuecheng.version>
     </properties>
@@ -101,6 +103,12 @@
                 <artifactId>base</artifactId>
                 <version>${xuecheng.version}</version>
             </dependency>
+            <!-- gateway -->
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>gateway</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
             <!-- content -->
             <dependency>
                 <groupId>com.xuecheng</groupId>
@@ -133,11 +141,29 @@
                 <artifactId>system-api</artifactId>
                 <version>${xuecheng.version}</version>
             </dependency>
+            <!-- media -->
             <dependency>
                 <groupId>com.xuecheng</groupId>
-                <artifactId>gateway</artifactId>
+                <artifactId>media-model</artifactId>
                 <version>${xuecheng.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>media-service</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xuecheng</groupId>
+                <artifactId>media-api</artifactId>
+                <version>${xuecheng.version}</version>
+            </dependency>
+            <!-- minio -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
