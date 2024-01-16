@@ -30,6 +30,7 @@
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <fastjson2.version>2.0.27</fastjson2.version>
         <minio.version>8.5.7</minio.version>
+        <simplemagic.version>1.17</simplemagic.version>
 
         <xuecheng.version>0.0.1</xuecheng.version>
     </properties>
@@ -90,12 +91,18 @@
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>${springfox-boot-starter.version}</version>
             </dependency>
+            <!-- fastjson2 -->
             <dependency>
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
                 <version>${fastjson2.version}</version>
             </dependency>
-
+            <!-- simplemagic 根据文件和字节数组确定 MIME 类型 -->
+            <dependency>
+                <groupId>com.j256.simplemagic</groupId>
+                <artifactId>simplemagic</artifactId>
+                <version>${simplemagic.version}</version>
+            </dependency>
 
             <!-- 学成,版本管理 -->
             <dependency>

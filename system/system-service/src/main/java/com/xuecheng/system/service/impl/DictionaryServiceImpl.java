@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xuecheng.system.mapper.DictionaryMapper;
 import com.xuecheng.system.po.Dictionary;
 import com.xuecheng.system.service.DictionaryService;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * @createDate 2023-04-17 15:54:38
  */
 @Service
-@Slf4j
+@Log4j2
 public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Dictionary> implements DictionaryService {
     @Override
     public List<Dictionary> queryAll() {

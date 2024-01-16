@@ -2,7 +2,7 @@ package com.xuecheng.base.exception;
 
 import com.xuecheng.base.enumeration.CommonError;
 import com.xuecheng.base.model.RestErrorResponse;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author zhangyu
  * @date 2023/11/19 22:54
  */
-@Slf4j
+@Log4j2
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

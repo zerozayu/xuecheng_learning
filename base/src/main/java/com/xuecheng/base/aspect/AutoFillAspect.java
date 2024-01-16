@@ -5,7 +5,7 @@ import com.xuecheng.base.constant.AutoFillMethods;
 import com.xuecheng.base.enumeration.OperationType;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.utils.ReflectUtils;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
  * @author zhangyu
  * @date 2023/12/12 14:53
  */
-@Slf4j
+@Log4j2
 @Component
 @Aspect
 public class AutoFillAspect {

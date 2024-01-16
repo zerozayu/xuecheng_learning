@@ -60,5 +60,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+
+        <!-- MIME类型推断 -->
+        <dependency>
+            <groupId>com.j256.simplemagic</groupId>
+            <artifactId>simplemagic</artifactId>
+        </dependency>
     </dependencies>
 </project>
