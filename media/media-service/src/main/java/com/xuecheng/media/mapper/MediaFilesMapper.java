@@ -1,7 +1,7 @@
-package com.zhangyu.media.mapper;
+package com.xuecheng.media.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zhangyu.media.model.vo.MediaFiles;
+import com.xuecheng.media.model.vo.MediaFiles;
 
 /**
 * @author zhangyu

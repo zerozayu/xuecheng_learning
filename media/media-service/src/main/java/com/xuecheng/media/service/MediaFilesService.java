@@ -1,9 +1,9 @@
-package com.zhangyu.media.service;
+package com.xuecheng.media.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zhangyu.media.model.dto.UploadFileParamsDto;
-import com.zhangyu.media.model.dto.UploadFileResultDto;
-import com.zhangyu.media.model.vo.MediaFiles;
+import com.xuecheng.media.model.dto.UploadFileParamsDto;
+import com.xuecheng.media.model.dto.UploadFileResultDto;
+import com.xuecheng.media.model.vo.MediaFiles;
 
 /**
  * @author zhangyu

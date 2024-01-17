@@ -1,4 +1,4 @@
-package com.zhangyu.media.model.dto;
+package com.xuecheng.media.model.dto;
 
 import lombok.Data;
 

@@ -1,14 +1,14 @@
-package com.zhangyu.media.service.impl;
+package com.xuecheng.media.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
 import com.xuecheng.base.exception.XueChengPlusException;
-import com.zhangyu.media.mapper.MediaFilesMapper;
-import com.zhangyu.media.model.dto.UploadFileParamsDto;
-import com.zhangyu.media.model.dto.UploadFileResultDto;
-import com.zhangyu.media.model.vo.MediaFiles;
-import com.zhangyu.media.service.MediaFilesService;
+import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.model.dto.UploadFileParamsDto;
+import com.xuecheng.media.model.dto.UploadFileResultDto;
+import com.xuecheng.media.model.vo.MediaFiles;
+import com.xuecheng.media.service.MediaFilesService;
 import io.minio.MinioClient;
 import io.minio.UploadObjectArgs;
 import lombok.extern.log4j.Log4j2;
@@ -88,7 +88,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
      * @param uploadFileParamsDto 文件上传信息
      * @param bucket              桶
      * @param objectName          对象名
-     * @return {@link com.zhangyu.media.model.vo.MediaFiles}
+     * @return {@link MediaFiles}
      * @throws
      * @author zhangyu
      * @date 2024/1/16 23:53

@@ -1,4 +1,4 @@
-package com.zhangyu.media.config;
+package com.xuecheng.media.config;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;

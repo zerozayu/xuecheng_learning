@@ -1,6 +1,6 @@
-package com.zhangyu.media.model.dto;
+package com.xuecheng.media.model.dto;
 
-import com.zhangyu.media.model.vo.MediaFiles;
+import com.xuecheng.media.model.vo.MediaFiles;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

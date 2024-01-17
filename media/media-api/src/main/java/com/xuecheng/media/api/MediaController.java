@@ -1,8 +1,8 @@
-package com.zhangyu.media.api;
+package com.xuecheng.media.api;
 
-import com.zhangyu.media.model.dto.UploadFileParamsDto;
-import com.zhangyu.media.model.dto.UploadFileResultDto;
-import com.zhangyu.media.service.MediaFilesService;
+import com.xuecheng.media.model.dto.UploadFileParamsDto;
+import com.xuecheng.media.model.dto.UploadFileResultDto;
+import com.xuecheng.media.service.MediaFilesService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import java.io.IOException;
  * @date 2024/1/16 23:59
  */
 @RestController
-@RequestMapping("")
+@RequestMapping
 public class MediaController {
     private final MediaFilesService mediaFilesService;
 
@@ -24,6 +24,15 @@ public class MediaController {
         this.mediaFilesService = mediaFilesService;
     }
 
+    /**
+     * @param filedata 文件
+     * @param folder
+     * @param objectName
+     * @return {@link UploadFileResultDto}
+     * @throws
+     * @author zhangyu
+     * @date 2024/1/17 11:32
+     */
     @ApiOperation("上传文件")
     @RequestMapping(value = "/upload/coursefile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody

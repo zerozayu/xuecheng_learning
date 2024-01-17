@@ -1,4 +1,4 @@
-package com.zhangyu.media.config;
+package com.xuecheng.media.config;
 
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;

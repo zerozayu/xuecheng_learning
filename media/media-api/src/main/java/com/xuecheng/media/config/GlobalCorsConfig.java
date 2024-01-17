@@ -1,4 +1,4 @@
-package com.zhangyu.media.config;
+package com.xuecheng.media.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

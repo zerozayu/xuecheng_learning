@@ -29,7 +29,7 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <fastjson2.version>2.0.27</fastjson2.version>
-        <minio.version>8.5.7</minio.version>
+        <minio.version>7.1.4</minio.version>
         <simplemagic.version>1.17</simplemagic.version>
 
         <xuecheng.version>0.0.1</xuecheng.version>
