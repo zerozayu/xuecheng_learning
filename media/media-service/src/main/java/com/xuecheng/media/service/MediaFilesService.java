@@ -21,4 +21,19 @@ public interface MediaFilesService extends IService<MediaFiles> {
      * @return 文件信息
      */
     UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath);
+
+    /**
+     * 将文件信息添加到文件表
+     *
+     * @param companyId           机构id
+     * @param fileMd5             文件md5值
+     * @param uploadFileParamsDto 文件上传信息
+     * @param bucket              桶
+     * @param objectName          对象名
+     * @return {@link MediaFiles}
+     * @throws
+     * @author zhangyu
+     * @date 2024/1/16 23:53
+     */
+    MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName);
 }

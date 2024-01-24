@@ -42,10 +42,12 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
 
     private final MinioClient minioClient;
     private final MediaFilesMapper mediaFilesMapper;
+    private final MediaFilesServiceImpl currentProxy;
 
-    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper) {
+    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, MediaFilesServiceImpl currentProxy) {
         this.minioClient = minioClient;
         this.mediaFilesMapper = mediaFilesMapper;
+        this.currentProxy = currentProxy;
     }
 
     @Transactional
@@ -72,7 +74,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         //文件大小
         uploadFileParamsDto.setFileSize(file.length());
         //将文件信息存储到数据库
-        MediaFiles mediaFiles = addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
+        MediaFiles mediaFiles = currentProxy.addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
         //准备返回数据
         UploadFileResultDto uploadFileResultDto = new UploadFileResultDto();
         BeanUtils.copyProperties(mediaFiles, uploadFileResultDto);
@@ -93,8 +95,9 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
      * @author zhangyu
      * @date 2024/1/16 23:53
      */
-    private MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName) {
-//从数据库查询文件
+    @Transactional
+    public MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName) {
+        //从数据库查询文件
         MediaFiles mediaFiles = mediaFilesMapper.selectById(fileMd5);
         if (mediaFiles == null) {
             mediaFiles = new MediaFiles();
