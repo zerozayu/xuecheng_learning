@@ -1,6 +1,9 @@
 package com.xuecheng.media.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xuecheng.base.model.PageParams;
+import com.xuecheng.base.model.PageResult;
+import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
@@ -11,6 +14,8 @@ import com.xuecheng.media.model.vo.MediaFiles;
  * @createDate 2024-01-16 22:00:11
  */
 public interface MediaFilesService extends IService<MediaFiles> {
+
+    PageResult<MediaFiles> queryMediaFiles(PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto);
 
     /**
      * 上传文件
@@ -36,4 +41,5 @@ public interface MediaFilesService extends IService<MediaFiles> {
      * @date 2024/1/16 23:53
      */
     MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName);
+
 }

@@ -1,8 +1,13 @@
 package com.xuecheng.media.api;
 
+import com.xuecheng.base.model.PageParams;
+import com.xuecheng.base.model.PageResult;
+import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
+import com.xuecheng.media.model.vo.MediaFiles;
 import com.xuecheng.media.service.MediaFilesService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +22,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping
+@Api(value = "媒资文件管理接口", tags = "媒资文件管理接口")
 public class MediaController {
     private final MediaFilesService mediaFilesService;
 
@@ -25,7 +31,24 @@ public class MediaController {
     }
 
     /**
-     * @param filedata 文件
+     * 查询
+     *
+     * @param pageParams 分页参数
+     * @param queryMediaParamsDto 查询请求
+     * @return {@link PageResult< MediaFiles>}
+     * @throws
+     * @author zhangyu
+     * @date 2024/1/25 00:35
+     */
+    @ApiOperation("媒资列表查询接口")
+    @PostMapping("/files")
+    public PageResult<MediaFiles> list(PageParams pageParams, @RequestBody QueryMediaParamsDto queryMediaParamsDto) {
+        Long companyId = 1232141425L;
+        return mediaFilesService.queryMediaFiles(pageParams, queryMediaParamsDto);
+    }
+
+    /**
+     * @param filedata   文件
      * @param folder
      * @param objectName
      * @return {@link UploadFileResultDto}

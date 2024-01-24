@@ -1,10 +1,16 @@
 package com.xuecheng.media.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
 import com.xuecheng.base.exception.XueChengPlusException;
+import com.xuecheng.base.model.PageParams;
+import com.xuecheng.base.model.PageResult;
 import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
@@ -13,6 +19,7 @@ import io.minio.MinioClient;
 import io.minio.UploadObjectArgs;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -25,6 +32,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyu
@@ -42,12 +50,28 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
 
     private final MinioClient minioClient;
     private final MediaFilesMapper mediaFilesMapper;
-    private final MediaFilesServiceImpl currentProxy;
 
-    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, MediaFilesServiceImpl currentProxy) {
+    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper) {
         this.minioClient = minioClient;
         this.mediaFilesMapper = mediaFilesMapper;
-        this.currentProxy = currentProxy;
+    }
+
+    @Override
+    public PageResult<MediaFiles> queryMediaFiles(PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto) {
+
+        // 分页对象
+        Page<MediaFiles> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
+        //构建查询条件对象
+        LambdaQueryWrapper<MediaFiles> queryWrapper = new LambdaQueryWrapper<>();
+        // 查询数据内容获得结果
+        Page<MediaFiles> pageResult = mediaFilesMapper.selectPage(page, queryWrapper);
+        // 获取数据列表
+        List<MediaFiles> list = pageResult.getRecords();
+        // 获取数据总数
+        long total = page.getTotal();
+        // 构建结果集
+        PageResult<MediaFiles> mediaListResult = new PageResult<>(list, total, pageParams.getPageNo(), pageParams.getPageSize());
+        return mediaListResult;
     }
 
     @Transactional
@@ -74,7 +98,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         //文件大小
         uploadFileParamsDto.setFileSize(file.length());
         //将文件信息存储到数据库
-        MediaFiles mediaFiles = currentProxy.addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
+        MediaFiles mediaFiles = ((MediaFilesService) AopContext.currentProxy()).addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
         //准备返回数据
         UploadFileResultDto uploadFileResultDto = new UploadFileResultDto();
         BeanUtils.copyProperties(mediaFiles, uploadFileResultDto);
