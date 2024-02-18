@@ -3,10 +3,12 @@ package com.xuecheng.media.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
+import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
+import io.swagger.models.auth.In;
 
 /**
  * @author zhangyu
@@ -42,4 +44,30 @@ public interface MediaFilesService extends IService<MediaFiles> {
      */
     MediaFiles addMediaFilesToDb(Long companyId, String fileMd5, UploadFileParamsDto uploadFileParamsDto, String bucket, String objectName);
 
+    /**
+     * 检查文件是否存在
+     *
+     * @param fileMd5 文件md5值
+     * @return {@link RestResponse<Boolean>}
+     * @throws
+     * @author zhangyu
+     * @date 2024/1/29 22:13
+     */
+    RestResponse<Boolean> checkFile(String fileMd5);
+
+    /**
+     * 检查分块是否存在
+     *
+     * @param fileMd5    文件的md5值
+     * @param chunkIndex 分块序号
+     * @return {@link RestResponse<Boolean>}
+     * @throws
+     * @author zhangyu
+     * @date 2024/1/29 22:14
+     */
+    RestResponse<Boolean> checkChunk(String fileMd5, int chunkIndex);
+
+    RestResponse uploadChunk(String fileMd5, int chunk, String localFilePath);
+
+    RestResponse mergeChunk(Long companyId, String fileMd5, int chunkTotal, UploadFileParamsDto uploadFileParamsDto);
 }

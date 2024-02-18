@@ -1,5 +1,9 @@
 #微服务配置
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
   application:
     name: media-api
   profiles:

@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
  */
 @Getter
 public enum CommonError {
+    OK("000000", "一切 ok"),
     UNKNOWN_ERROR("999999", "执行过程异常，请重试。"),
     PARAMS_ERROR("900002", "非法参数"),
     OBJECT_NULL("900003", "对象为空"),
@@ -26,5 +27,9 @@ public enum CommonError {
     CommonError(String errCode, String errMessage) {
         this.errCode = errCode;
         this.errMessage = errMessage;
+    }
+
+    public String getCode() {
+        return errCode;
     }
 }
