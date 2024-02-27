@@ -16,23 +16,20 @@ import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
 import com.xuecheng.media.service.MediaFilesService;
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MimeTypeUtils;
 
 import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -59,10 +56,12 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
 
     private final MinioClient minioClient;
     private final MediaFilesMapper mediaFilesMapper;
+    private final ApplicationContext applicationContext;
 
-    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper) {
+    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, ApplicationContext applicationContext) {
         this.minioClient = minioClient;
         this.mediaFilesMapper = mediaFilesMapper;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -107,7 +106,8 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         //文件大小
         uploadFileParamsDto.setFileSize(file.length());
         //将文件信息存储到数据库
-        MediaFiles mediaFiles = ((MediaFilesService) AopContext.currentProxy()).addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
+        MediaFilesService mediaFilesService = applicationContext.getBean(MediaFilesService.class);
+        MediaFiles mediaFiles = mediaFilesService.addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
         //准备返回数据
         UploadFileResultDto uploadFileResultDto = new UploadFileResultDto();
         BeanUtils.copyProperties(mediaFiles, uploadFileResultDto);
@@ -242,7 +242,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         // 文件扩展名
         String extName = fileName.substring(fileName.lastIndexOf("."));
         // 合并文件路径
-        String mergeFilePath = getFilePathByMd5(fileName, extName);
+        String mergeFilePath = getFilePathByMd5(fileMd5, extName);
         try {
             // 合并文件
             ObjectWriteResponse response = minioClient.composeObject(
@@ -284,7 +284,8 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         }
 
         // 文件入库
-        ((MediaFilesService) AopContext.currentProxy()).addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_videoFiles, mergeFilePath);
+        MediaFilesService mediaFilesService = applicationContext.getBean(MediaFilesService.class);
+        mediaFilesService.addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_videoFiles, mergeFilePath);
 
         // 清除分块文件
         clearChunkFiles(chunkFileFolderPath, chunkTotal);
