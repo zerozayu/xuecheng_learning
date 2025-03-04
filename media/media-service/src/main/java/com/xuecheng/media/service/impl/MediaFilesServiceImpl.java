@@ -1,6 +1,7 @@
 package com.xuecheng.media.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j256.simplemagic.ContentInfo;
@@ -10,10 +11,12 @@ import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.mapper.MediaUploadLogMapper;
 import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
+import com.xuecheng.media.model.vo.MediaUploadLog;
 import com.xuecheng.media.service.MediaFilesService;
 import io.minio.*;
 import io.minio.messages.DeleteError;
@@ -56,11 +59,13 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
 
     private final MinioClient minioClient;
     private final MediaFilesMapper mediaFilesMapper;
+    private final MediaUploadLogMapper mediaUploadLogMapper;
     private final ApplicationContext applicationContext;
 
-    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, ApplicationContext applicationContext) {
+    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, MediaUploadLogMapper mediaUploadLogMapper, ApplicationContext applicationContext) {
         this.minioClient = minioClient;
         this.mediaFilesMapper = mediaFilesMapper;
+        this.mediaUploadLogMapper = mediaUploadLogMapper;
         this.applicationContext = applicationContext;
     }
 
@@ -101,8 +106,20 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         String defaultFolderPath = getDefaultFolderPath();
         //存储到minio中的对象名(带目录)
         String objectName = defaultFolderPath + fileMd5 + extension;
+
+        // 上传的 minio 之前，先往上传记录表中插入一条上传记录
+        MediaUploadLog mediaUploadLog = new MediaUploadLog();
+        mediaUploadLog.setId(fileMd5);
+        mediaUploadLog.setBucket(bucket_videoFiles);
+        mediaUploadLog.setFileStatus("0");
+        mediaUploadLog.setCreateTime(LocalDateTime.now());
+        mediaUploadLogMapper.insert(mediaUploadLog);
         //将文件上传到minio
-        boolean b = addMediaFilesToMinIO(localFilePath, mimeType, bucket_files, objectName);
+        addMediaFilesToMinIO(localFilePath, mimeType, bucket_files, objectName);
+
+        // 上传完成后，更新上传记录状态为已完成
+        LambdaUpdateWrapper<MediaUploadLog> updateWrapper = new LambdaUpdateWrapper<MediaUploadLog>().eq(MediaUploadLog::getFileStatus, "1");
+        mediaUploadLogMapper.update(mediaUploadLog, updateWrapper);
         //文件大小
         uploadFileParamsDto.setFileSize(file.length());
         //将文件信息存储到数据库
@@ -388,7 +405,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
      * @param objectName    对象名称
      * @return void
      */
-    private boolean addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName) {
+    private void addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName) {
         try {
             UploadObjectArgs uploadObjectArgs = UploadObjectArgs.builder()
                     .bucket(bucket)
@@ -397,13 +414,11 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
                     .contentType(mimeType)
                     .build();
             minioClient.uploadObject(uploadObjectArgs);
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
             log.error("上传文件到minio出错,bucket:{},objectName:{},错误原因:{}", bucket, objectName, e.getMessage(), e);
             XueChengPlusException.cast("上传文件到文件系统失败");
         }
-        return false;
     }
 
     //获取文件默认存储目录路径 年/月/日/
