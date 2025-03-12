@@ -1,0 +1,25 @@
+# gateway-dev.yml
+server:
+  port: 63010
+spring:
+  cloud:
+    gateway:
+      routes: # 网关路由配置
+        - id: content-api # 路由定义,自定义,只要唯一即可
+          uri: lb://content-api # 路由的目标地址,lb就是负载均衡,后面跟服务名称
+          predicates:
+            - Path=/content/** # 这个是按照路径匹配,只要以/content/开头就符合要求
+        # filters:
+        #   - StripPrefix=1
+        - id: system-api
+          uri: lb://system-api
+          predicates:
+            - Path=/content/**
+        # filters:
+        #   - StripPrefix=1
+        - id: media-api
+          uri: lb://media-api
+          predicates:
+            - Path=/media/**
+        # filters:
+        #   - StripPrefix=1

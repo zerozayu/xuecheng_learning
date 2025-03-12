@@ -6,9 +6,9 @@ spring:
     active: dev
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: 117.73.12.23:38848
       username: nacos
-      password: nacos
+      password: zhangyu
       discovery:
         namespace: dev
         group: xuecheng-plus-project
@@ -17,10 +17,10 @@ spring:
         group: xuecheng-plus-project
         file-extension: yml
         refresh-enabled: true
-        extension-configs:
-          - data-id: system-service-${spring.profiles.active}.yml
-            group: xuecheng-plus-project
-            refresh: true
+#        extension-configs:
+#          - data-id: system-service-${spring.profiles.active}.yml
+#            group: xuecheng-plus-project
+#            refresh: true
         shared-configs:
           - data-id: logging-${spring.profiles.active}.yml
             group: xuecheng-plus-common

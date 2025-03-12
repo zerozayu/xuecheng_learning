@@ -5,7 +5,9 @@ spring:
     active: dev
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: 117.73.12.23:38848
+      username: nacos
+      password: zhangyu
       discovery:
         namespace: dev
         group: xuecheng-plus-project

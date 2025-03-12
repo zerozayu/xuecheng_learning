@@ -1,0 +1,25 @@
+---
+# system-api-dev.yml
+server:
+  servlet:
+    context-path: /system
+  port: 63110
+
+spring:
+  devtools:
+    restart:
+      # 热启动自动重启
+      enabled: true
+  mvc:
+    pathmatch:
+      # Springfox 使用的路径匹配是基于AntPathMatcher的，而Spring Boot 2.6.X使用的是PathPatternMatcher。
+      matching-strategy: ant_path_matcher
+
+---
+# system-service-dev.yml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://117.73.12.23:33306/xc_system?useSSL=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false
+    username: root
+    password: zhangyu

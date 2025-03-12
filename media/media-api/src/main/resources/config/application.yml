@@ -1,0 +1,50 @@
+---
+# media-service-dev.yml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://117.73.12.23:33306/xc_media?useSSL=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false
+    username: root
+    password: zhangyu
+
+# minio 配置
+minio:
+  endpoint: http://117.73.12.23:39000
+  accessKey: zhangyu
+  secretKey: zhangyu123
+  bucket:
+    files: mediafiles
+    videofiles: video
+
+xxl:
+  job:
+    admin:
+      addresses: http://117.73.12.23:38080/xxl-job-admin
+    executor:
+      appname: media-process-service
+      address:
+      ip:
+      port: 9999
+      logpath: /data/applogs/xxl-job/jobhandler
+      logretentiondays: 30
+    accessToken: zhangyu
+
+---
+# media-api-dev.yml
+server:
+  servlet:
+    context-path: /media
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  port: 63050
+
+spring:
+  devtools:
+    restart:
+      # 热启动自动重启
+      enabled: true
+  mvc:
+    pathmatch:
+      # Springfox 使用的路径匹配是基于AntPathMatcher的，而Spring Boot 2.6.X使用的是PathPatternMatcher。
+      matching-strategy: ant_path_matcher
