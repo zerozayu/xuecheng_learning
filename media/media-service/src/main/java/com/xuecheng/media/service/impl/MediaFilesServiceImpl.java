@@ -111,10 +111,11 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         //存储到minio中的对象名(带目录)
         String objectName = defaultFolderPath + fileMd5 + extension;
 
+        // todo 这个地方需要判断是否已经上传过，没上传过再往记录表和 minio 插入
         // 上传的 minio 之前，先往上传记录表中插入一条上传记录
         MediaUploadLog mediaUploadLog = new MediaUploadLog();
         mediaUploadLog.setId(fileMd5);
-        mediaUploadLog.setBucket(bucket_videoFiles);
+        mediaUploadLog.setBucket(bucket_files);
         mediaUploadLog.setFileStatus("0");
         mediaUploadLog.setCreateTime(LocalDateTime.now());
         mediaUploadLogMapper.insert(mediaUploadLog);
