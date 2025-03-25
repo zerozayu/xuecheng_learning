@@ -6,6 +6,7 @@ import com.xuecheng.system.mapper.DictionaryMapper;
 import com.xuecheng.system.po.Dictionary;
 import com.xuecheng.system.service.DictionaryService;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  * @createDate 2023-04-17 15:54:38
  */
 @Service
-@Log4j2
+@Slf4j
 public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Dictionary> implements DictionaryService {
     @Override
     public List<Dictionary> queryAll() {

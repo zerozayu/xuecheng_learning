@@ -8,7 +8,8 @@ import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
-import io.swagger.models.auth.In;
+
+import java.io.File;
 
 /**
  * @author zhangyu
@@ -70,4 +71,9 @@ public interface MediaFilesService extends IService<MediaFiles> {
     RestResponse uploadChunk(String fileMd5, int chunk, String localFilePath);
 
     RestResponse mergeChunk(Long companyId, String fileMd5, int chunkTotal, UploadFileParamsDto uploadFileParamsDto);
+
+    File downloadFileFromMinio(String bucket, String objectName);
+
+    // 向MinIO添加媒体文件
+    void addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName);
 }

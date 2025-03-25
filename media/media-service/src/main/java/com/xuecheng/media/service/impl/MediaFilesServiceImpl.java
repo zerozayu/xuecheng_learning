@@ -1,7 +1,6 @@
 package com.xuecheng.media.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.j256.simplemagic.ContentInfo;
@@ -11,17 +10,19 @@ import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.mapper.MediaProcessMapper;
 import com.xuecheng.media.mapper.MediaUploadLogMapper;
 import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.vo.MediaFiles;
+import com.xuecheng.media.model.vo.MediaProcess;
 import com.xuecheng.media.model.vo.MediaUploadLog;
 import com.xuecheng.media.service.MediaFilesService;
 import io.minio.*;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +46,7 @@ import java.util.stream.Stream;
  * @description 针对表【media_files(媒资信息)】的数据库操作Service实现
  * @createDate 2024-01-16 22:00:11
  */
-@Log4j2
+@Slf4j
 @Service
 public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFiles>
         implements MediaFilesService {
@@ -60,13 +61,15 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
     private final MinioClient minioClient;
     private final MediaFilesMapper mediaFilesMapper;
     private final MediaUploadLogMapper mediaUploadLogMapper;
+    private final MediaProcessMapper mediaProcessMapper;
     private final ApplicationContext applicationContext;
 
-    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, MediaUploadLogMapper mediaUploadLogMapper, ApplicationContext applicationContext) {
+    public MediaFilesServiceImpl(MinioClient minioClient, MediaFilesMapper mediaFilesMapper, MediaUploadLogMapper mediaUploadLogMapper, ApplicationContext applicationContext, MediaProcessMapper mediaProcessMapper) {
         this.minioClient = minioClient;
         this.mediaFilesMapper = mediaFilesMapper;
         this.mediaUploadLogMapper = mediaUploadLogMapper;
         this.applicationContext = applicationContext;
+        this.mediaProcessMapper = mediaProcessMapper;
     }
 
     @Override
@@ -76,6 +79,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         Page<MediaFiles> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
         //构建查询条件对象
         LambdaQueryWrapper<MediaFiles> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderBy(true, false, MediaFiles::getCreateDate);
         // 查询数据内容获得结果
         Page<MediaFiles> pageResult = mediaFilesMapper.selectPage(page, queryWrapper);
         // 获取数据列表
@@ -118,8 +122,8 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         addMediaFilesToMinIO(localFilePath, mimeType, bucket_files, objectName);
 
         // 上传完成后，更新上传记录状态为已完成
-        LambdaUpdateWrapper<MediaUploadLog> updateWrapper = new LambdaUpdateWrapper<MediaUploadLog>().eq(MediaUploadLog::getFileStatus, "1");
-        mediaUploadLogMapper.update(mediaUploadLog, updateWrapper);
+        mediaUploadLog.setFileStatus("1");
+        mediaUploadLogMapper.updateById(mediaUploadLog);
         //文件大小
         uploadFileParamsDto.setFileSize(file.length());
         //将文件信息存储到数据库
@@ -168,8 +172,9 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
                 log.error("保存文件信息到数据库失败,{}", mediaFiles.toString());
                 XueChengPlusException.cast("保存文件信息失败");
             }
+            //添加到待处理任务表
+            addWaitingTask(mediaFiles);
             log.debug("保存文件信息到数据库成功,{}", mediaFiles.toString());
-
         }
         return mediaFiles;
     }
@@ -276,7 +281,7 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         }
 
         // =======验证md5=======
-        File minioFile = downloadFileFromMinIO(bucket_videoFiles, mergeFilePath);
+        File minioFile = downloadFileFromMinio(bucket_videoFiles, mergeFilePath);
         if (minioFile == null) {
             log.debug("下载合并后文件失败, mergeFilePath: {}", mergeFilePath);
             return RestResponse.validfail("下载合并后文件失败.", false);
@@ -309,6 +314,35 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
 
         return RestResponse.success(true);
     }
+
+
+    /**
+     * 将文件写入minIO
+     *
+     * @param localFilePath 文件地址
+     * @param mimeType      mimeType
+     * @param bucket        桶
+     * @param objectName    对象名称
+     * @return void
+     */
+    @Override
+    public void addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName) {
+        try {
+            UploadObjectArgs uploadObjectArgs = UploadObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectName)
+                    .filename(localFilePath)
+                    .contentType(mimeType)
+                    .build();
+            minioClient.uploadObject(uploadObjectArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("上传文件到minio出错,bucket:{},objectName:{},错误原因:{}", bucket, objectName, e.getMessage(), e);
+            XueChengPlusException.cast("上传文件到文件系统失败");
+        }
+    }
+
+
 
     private void clearChunkFiles(String chunkFileFolderPath, int chunkTotal) {
         try {
@@ -348,7 +382,8 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
      * @author zhangyu
      * @date 2024/2/18 22:31
      */
-    private File downloadFileFromMinIO(String bucket, String objectName) {
+    @Override
+    public File downloadFileFromMinio(String bucket, String objectName) {
         // 临时文件
         File minioFile = null;
         FileOutputStream outputStream = null;
@@ -396,31 +431,6 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
         return fileMd5.charAt(0) + "/" + fileMd5.charAt(1) + "/" + fileMd5 + "/chunk/";
     }
 
-    /**
-     * 将文件写入minIO
-     *
-     * @param localFilePath 文件地址
-     * @param mimeType      mimeType
-     * @param bucket        桶
-     * @param objectName    对象名称
-     * @return void
-     */
-    private void addMediaFilesToMinIO(String localFilePath, String mimeType, String bucket, String objectName) {
-        try {
-            UploadObjectArgs uploadObjectArgs = UploadObjectArgs.builder()
-                    .bucket(bucket)
-                    .object(objectName)
-                    .filename(localFilePath)
-                    .contentType(mimeType)
-                    .build();
-            minioClient.uploadObject(uploadObjectArgs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("上传文件到minio出错,bucket:{},objectName:{},错误原因:{}", bucket, objectName, e.getMessage(), e);
-            XueChengPlusException.cast("上传文件到文件系统失败");
-        }
-    }
-
     //获取文件默认存储目录路径 年/月/日/
     private String getDefaultFolderPath() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -448,6 +458,28 @@ public class MediaFilesServiceImpl extends ServiceImpl<MediaFilesMapper, MediaFi
             mimeType = extensionMatch.getMimeType();
         }
         return mimeType;
+    }
+
+    /**
+     * 添加待处理任务
+     *
+     * @param mediaFiles 媒资文件信息
+     */
+    private void addWaitingTask(MediaFiles mediaFiles) {
+        //文件名称
+        String filename = mediaFiles.getFilename();
+        //文件扩展名
+        String exension = filename.substring(filename.lastIndexOf("."));
+        //文件mimeType
+        String mimeType = getMimeType(exension);
+        //如果是avi视频添加到视频待处理表
+        if (mimeType.equals("video/x-msvideo")) {
+            MediaProcess mediaProcess = new MediaProcess();
+            BeanUtils.copyProperties(mediaFiles, mediaProcess);
+            mediaProcess.setStatus("1");//未处理
+            mediaProcess.setFailCount(0);//失败次数默认为0
+            mediaProcessMapper.insert(mediaProcess);
+        }
     }
 }
 

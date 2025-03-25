@@ -3,6 +3,7 @@ package com.xuecheng.content.api;
 import com.xuecheng.content.model.dto.CourseCategoryTreeDto;
 import com.xuecheng.content.service.CourseCategoryService;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @author zhangyu
  * @date 2023/4/18 23:35
  */
-@Log4j2
+@Slf4j
 @RestController
 public class CourseCategoryController {
 
